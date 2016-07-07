@@ -3,9 +3,12 @@ local http = require("socket.http")
 local gzio = require("gzio")
 
 local avnumber
-print("Please enter the av number")
+print("av number:")
 avnumber = io.read("*line")
 assert("number" ~= type(avnumber))
+local floornumber
+print("floor number:")
+floornumber = tonumber(io.read("*line"),10)
 
 function getPage(pn)
 	local tmpFileName = "reply.json.gz"
@@ -48,9 +51,8 @@ function getFloor(fl)
 	local delta = (fl -(floor_max+floor_min)/2)/20
 
 	repeat
-		if(delta <1 and delta >-1) then
-			page_current,floor_max,floor_min = getPage(math.floor(pn))
-		end
+		page_current,floor_max,floor_min = getPage(math.floor(pn))
+
 		delta = (fl -(floor_max+floor_min)/2)/20
 
 		if(pn < 2 and fl > floor_max) then
@@ -63,15 +65,12 @@ function getFloor(fl)
 	return  math.floor(pn)
 end
 
-math.randomseed (os.time())
-
-for i = 1,10,1 do
-	local random_num = math.floor(math.random() * 5000)
-	print("floor ".. random_num )
-	local random_page = getFloor(random_num)
-	if(random_page == nil) then
-		print(" doesn't exist")
-	else
-		print(" is in page "..random_page)
-	end
+io.write("floor ".. floornumber )
+local floorpage = getFloor(floornumber)
+if(floorpage == nil) then
+	print(" doesn't exist")
+else
+	print(" is on page "..floorpage)
 end
+print("complete")
+io.read("*line")
